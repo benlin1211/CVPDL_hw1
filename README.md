@@ -57,7 +57,7 @@ Then, go to "~/anaconda3/envs/detr/lib/python3.8/site-packages/pycocotools/cocoe
     cd yolov8
     conda create --name yolov8 python=3.10
     conda activate yolov8
-    pip install ultralytics
+    pip install -r requirements.txt
 
     
 ### List all environments
