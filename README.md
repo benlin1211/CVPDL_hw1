@@ -64,7 +64,7 @@ Then, go to "~/anaconda3/envs/detr/lib/python3.8/site-packages/pycocotools/cocoe
     
 ### Check all package environment
 
-    conda list -n detr
+    conda list -n <env_name>
 
 ### Close an environment
 
@@ -72,7 +72,7 @@ Then, go to "~/anaconda3/envs/detr/lib/python3.8/site-packages/pycocotools/cocoe
 
 ### Remove an environment
 
-    conda env remove -n detr
+    conda env remove -n <env_name>
 
 # Reference:
 DETR: https://github.com/facebookresearch/detr
