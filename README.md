@@ -8,9 +8,9 @@ To start working on this assignment, you should clone this repository into your 
 # Run train code - DETR
 
 ### Create environment
-You can run the following command to install all the packages listed in the requirements.txt:
-
-    conda create --name detr python=3.8
+    
+    cd detr
+    conda create --name detr python=3.10
     conda activate detr
     pip install -f https://download.pytorch.org/whl/cu110/torch_stable.html torch==1.7.0+cu110 torchvision==0.8.0
     conda install cython scipy
@@ -50,7 +50,10 @@ Then, go to "~/anaconda3/envs/detr/lib/python3.8/site-packages/pycocotools/cocoe
     
 # Run train code - yolov8
 
-    conda create --name yolov8 python=3.8
+### Create environment
+
+    cd yolov8
+    conda create --name yolov8 python=3.10
     conda activate yolov8
     pip install ultralytics
 
