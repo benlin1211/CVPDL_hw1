@@ -12,7 +12,9 @@ To start working on this assignment, you should clone this repository into your 
     cd detr
     conda create --name detr python=3.10
     conda activate detr
-    pip install -f https://download.pytorch.org/whl/cu110/torch_stable.html torch==1.7.0+cu110 torchvision==0.8.0
+    pip install torch==1.11.0+cu102 -f https://download.pytorch.org/whl/torch_stable.html 
+    pip install torchvision==0.12.0
+    # pip install -f https://download.pytorch.org/whl/cu110/torch_stable.html torch==1.7.0+cu110 torchvision==0.8.0
     conda install cython scipy
     pip install -U 'git+https://github.com/cocodataset/cocoapi.git#subdirectory=PythonAPI'
     pip install -r requirements.txt
