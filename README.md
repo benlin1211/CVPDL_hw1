@@ -3,7 +3,7 @@
 To start working on this assignment, you should clone this repository into your local machine by using the following command.
     
     git clone git@github.com:benlin1211/CVPDL_hw1.git
-    
+
     
 # Run train code - DETR
 
@@ -70,3 +70,7 @@ Then, go to "~/anaconda3/envs/detr/lib/python3.8/site-packages/pycocotools/cocoe
 ### Remove an environment
 
     conda env remove -n detr
+
+# Reference:
+DETR: https://github.com/facebookresearch/detr
+YOLOv8: https://github.com/ultralytics/ultralytics
