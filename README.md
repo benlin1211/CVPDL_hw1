@@ -52,14 +52,17 @@ _______________________
     conda activate yolov8
     pip install -r requirements.txt
     
-### Train from your own checkpoints
-    
-    python main.py --resume ./runs/detect/train32/weights/best.pt
-    
 ### Train from pre-train weights
     
     python main.py
     
+### Train from your own checkpoints
+    
+    python main.py --resume ./runs/detect/train/weights/best.pt
+
+### Eval and generate pred_eval.json
+
+    python main.py --resume ./runs/detect/train/weights/best.pt --eval
     
 ### List all environments
 
