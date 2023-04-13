@@ -18,7 +18,7 @@ if __name__ == '__main__':
     result['path'] = os.path.join(root, args.data_path) # dataset 路径
     result['train'] = 'images/train' #os.path.join( args.data_path,'images/train')  # 相对 path 的路径
     result['val'] = 'images/val' # same as train.
-    result['test'] = None
+    result['test'] = 'images/test' # None
     result['nc'] = args.num_classes
     result['names'] = {}
 

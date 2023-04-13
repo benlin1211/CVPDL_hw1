@@ -11,16 +11,20 @@ import glob
 from tqdm import tqdm
 import numpy as np
 
-def convert_coco_json(json_dir, prefix, save_dir):
-     # output directory
-    os.makedirs(save_dir, exist_ok=True) 
-
-    # copy image
+def create_img_folder(json_dir, prefix, save_dir):
     image_dir = os.path.join(save_dir, 'images', prefix)
     os.makedirs(image_dir, exist_ok=True)
     for image in sorted(glob.glob(os.path.join(json_dir, '*.jpg'))):
         # print(image)
         os.system(f'cp {image} {image_dir}')
+
+
+def convert_coco_json(json_dir, prefix, save_dir):
+     # output directory
+    os.makedirs(save_dir, exist_ok=True) 
+
+    # copy image
+    create_img_folder(json_dir, prefix, save_dir)
 
     # Import json
     save_json_dir = os.path.join(save_dir, 'labels', prefix)
@@ -92,6 +96,9 @@ if __name__ == '__main__':
     convert_coco_json(val_json,  # directory with *.json
                       'val',
                       args.save_dir)
+    
+    # There is no .json in test folder
+    create_img_folder(os.path.join(args.coco_path, "test") , "test", args.save_dir)
 
     # zip results
     # os.system('zip -r ../coco.zip ../coco')

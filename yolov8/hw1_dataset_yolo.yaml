@@ -1,7 +1,7 @@
 path: /mnt/sdb_path/ZhongWei/CVPDL/yolov8/datasets/hw1_dataset_yolo
 train: images/train
 val: images/val
-test: null
+test: images/test
 nc: 8
 names:
   0: creatures
