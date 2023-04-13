@@ -3,7 +3,9 @@
 To start working on this assignment, you should clone this repository into your local machine by using the following command.
     
     git clone git@github.com:benlin1211/CVPDL_hw1.git
+# Device
 
+NVIDIA GeForce RTX 3090.
     
 # Run train code - DETR
 
@@ -12,21 +14,12 @@ To start working on this assignment, you should clone this repository into your 
     cd detr
     conda create --name detr python=3.10
     conda activate detr
-    pip install torch==1.11.0+cu102 -f https://download.pytorch.org/whl/torch_stable.html 
+    pip install torch==1.11.0+cu113 -f https://download.pytorch.org/whl/torch_stable.html 
     pip install torchvision==0.12.0
     # pip install -f https://download.pytorch.org/whl/cu110/torch_stable.html torch==1.7.0+cu110 torchvision==0.8.0
     conda install cython scipy
     pip install -U 'git+https://github.com/cocodataset/cocoapi.git#subdirectory=PythonAPI'
     pip install -r requirements.txt
-    
-Then, go to "~/anaconda3/envs/detr/lib/python3.8/site-packages/pycocotools/cocoeval.py", line 378, in accumulate, change the line:
-    
-    # old
-    #tp_sum = np.cumsum(tps, axis=1).astype(dtype=np.float)
-    #fp_sum = np.cumsum(fps, axis=1).astype(dtype=np.float)
-    # new
-    tp_sum = np.cumsum(tps, axis=1).astype(dtype=np.float32)
-    fp_sum = np.cumsum(fps, axis=1).astype(dtype=np.float32)
     
 ### Train from pre-train weights
     python main.py --backbone resnet50 --coco_path ../hw1_dataset --resume https://dl.fbaipublicfiles.com/detr/detr-r50-e632da11.pth --output_dir ./ckpts_resnet50
