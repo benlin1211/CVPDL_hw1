@@ -15,7 +15,7 @@
 *.pkl
 
 ckpt*/
-yolov8/datasets/
+yolov8/datasets/hw1_dataset_yolo/*
 __pycache__/
 **/__pycache__/**
 .ipynb_checkpoints/
