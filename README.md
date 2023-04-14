@@ -63,6 +63,8 @@ _______________________
 ### Eval and generate pred_eval.json
 
     python main.py --resume ./runs/detect/train/weights/best.pt --eval
+    python yolo2submit.py --json_file ./runs/detect/val/predictions.json --out_file ./pred_eval.json
+    python ../hw1_dataset/check_your_prediction_valid.py ./pred_eval.json ../hw1_dataset/valid/_annotations.coco.json
     
 ### List all environments
 
