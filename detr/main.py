@@ -16,6 +16,7 @@ import util.misc as utils
 from datasets import build_dataset, get_coco_api_from_dataset, build_test_set
 from engine import evaluate, test, train_one_epoch
 from models import build_model
+import matplotlib.pyplot as plt
 
 
 def get_args_parser():
@@ -97,6 +98,7 @@ def get_args_parser():
                         help='start epoch')
     parser.add_argument('--eval', action='store_true')
     parser.add_argument('--test', action='store_true')
+    parser.add_argument('--report', action='store_true')
     parser.add_argument('--num_workers', default=2, type=int)
 
     # distributed training parameters
@@ -230,6 +232,11 @@ def main(args):
             with open('pred_test.json', 'w') as fp:
                 json.dump(results, fp)
             print("over")
+        return
+    if args.report: 
+        plt.figure()
+        plt.imshow()
+
         return
 
     print("Start training")

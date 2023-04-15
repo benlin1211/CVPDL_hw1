@@ -21,7 +21,7 @@ def get_args_parser():
     parser.add_argument('--epochs', default=300, type=int) 
     parser.add_argument('--batch', default=16, type=int)
     parser.add_argument('--lr0', default=1e-2, type=float)
-    parser.add_argument('--lrf', default=1e-2, type=float)
+    parser.add_argument('--lrf', default=1e-5, type=float)
     #  https://docs.ultralytics.com/modes/train/#arguments
     # ===================== Eval Config =====================
     parser.add_argument('--resume', default='', help='resume from checkpoint (xxx.pt)') #./runs/detect/train/weights/best.pt
@@ -95,11 +95,25 @@ def main(args):
         model = YOLO("yolov8x.pt")  # load a pretrained model (recommended for training)
 
     # Train the model
+    # https://github.com/ultralytics/ultralytics/issues/713
     model.train(data="./hw1_dataset_yolo.yaml", 
                 epochs=args.epochs, 
                 batch=args.batch, 
                 lr0=args.lr0, 
-                lrf=args.lrf)  # train the model
+                lrf=args.lrf,
+                # data augmentation
+                hsv_h=0.015,
+                hsv_s=0.5,
+                hsv_v=0.3,
+                degrees=0.0,
+                translate=0.1,
+                scale=0.5,
+                shear=1.0,
+                flipud=0.5,
+                fliplr=0.5,
+                mosaic=1.0,  # image mosaic (probability)
+                mixup=0.2,  # image mixup (probability)
+                )  # train the model
 
     # save the model to ONNX format
     success = model.export(format="onnx")  
