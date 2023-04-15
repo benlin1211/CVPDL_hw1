@@ -17,13 +17,20 @@ def get_args_parser():
     parser = argparse.ArgumentParser('Set transformer detector', add_help=False)
     # parser.add_argument('--lr', default=1e-4, type=float)
     parser.add_argument('--seed', default=42, type=int) 
-    parser.add_argument('--epochs', default=200, type=int) 
+    # ===================== Train Config ====================
+    parser.add_argument('--epochs', default=300, type=int) 
+    parser.add_argument('--batch', default=16, type=int)
+    parser.add_argument('--lr0', default=1e-2, type=float)
+    parser.add_argument('--lrf', default=1e-2, type=float)
+    #  https://docs.ultralytics.com/modes/train/#arguments
+    # ===================== Eval Config =====================
+    parser.add_argument('--resume', default='', help='resume from checkpoint (xxx.pt)') #./runs/detect/train/weights/best.pt
     parser.add_argument('--confidence', default=0.25, type=float) 
     parser.add_argument('--eval', action='store_true')
     parser.add_argument('--eval_path', default='./datasets/hw1_dataset_yolo/images/val', type=str)
+    # ===================== Test Config =====================
     parser.add_argument('--test', action='store_true')
     parser.add_argument('--test_path', default='./datasets/hw1_dataset_yolo/images/test', type=str)
-    parser.add_argument('--resume', default='./runs/detect/train/weights/best.pt', help='resume from checkpoint (xxx.pt)') #./runs/detect/train/weights/best.pt
     return parser
 
 def generate_result(model, data_path, confidence):
@@ -54,8 +61,7 @@ def generate_result(model, data_path, confidence):
     return results
 
 def main(args):
-    # Load a model
-    # model = YOLO("yolov8n.yaml")  # build a new model from scratch
+    # Fix seed
     seed = args.seed 
     torch.manual_seed(seed)
     np.random.seed(seed)
@@ -75,21 +81,25 @@ def main(args):
     if args.test:
         print("test, resume from {args.resume}")
         model = YOLO(args.resume)
-
         results = generate_result(model, args.test_path, args.confidence)
         with open('./pred_test.json', 'w') as fp:
             json.dump(results, fp)
         print("over")
         return
     
+    # Load a model
     if args.resume:
         model = YOLO(args.resume)
         # For more args, please infer to https://docs.ultralytics.com/usage/cfg/#modes
     else:  
-        model = YOLO("yolov8n.pt")  # load a pretrained model (recommended for training)
+        model = YOLO("yolov8x.pt")  # load a pretrained model (recommended for training)
 
     # Train the model
-    model.train(data="./hw1_dataset_yolo.yaml", epochs=args.epochs)  # train the model
+    model.train(data="./hw1_dataset_yolo.yaml", 
+                epochs=args.epochs, 
+                batch=args.batch, 
+                lr0=args.lr0, 
+                lrf=args.lrf)  # train the model
 
     # save the model to ONNX format
     success = model.export(format="onnx")  
