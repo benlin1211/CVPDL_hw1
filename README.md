@@ -42,7 +42,7 @@ NVIDIA GeForce RTX 3090.
     python main.py --batch_size 1 --backbone resnet50 --no_aux_loss --test --coco_path ../hw1_dataset --resume ./ckpts_resnet50/checkpoint.pth
     python main.py --batch_size 1 --backbone resnet101 --no_aux_loss --test --coco_path ../hw1_dataset --resume ./ckpts_resnet101/checkpoint.pth
     
-    
+_______________________
 # Run train code - yolov8
 
 ### Create environment
@@ -51,7 +51,20 @@ NVIDIA GeForce RTX 3090.
     conda create --name yolov8 python=3.10
     conda activate yolov8
     pip install -r requirements.txt
+    
+### Train from pre-train weights
+    
+    python main.py
+    
+### Train from your own checkpoints
+    
+    python main.py --resume ./runs/detect/train/weights/best.pt
 
+### Eval and generate pred_eval.json
+
+    python main.py --resume ./runs/detect/train/weights/best.pt --eval
+    python yolo2submit.py --json_file ./runs/detect/val/predictions.json --out_file ./pred_eval.json
+    python ../hw1_dataset/check_your_prediction_valid.py ./pred_eval.json ../hw1_dataset/valid/_annotations.coco.json
     
 ### List all environments
 
