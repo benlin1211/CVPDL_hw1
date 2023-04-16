@@ -11,6 +11,7 @@ if __name__ == '__main__':
     parser.add_argument('--data_path', default="") #./hw1_dataset_yolo
     parser.add_argument('--out_path', default="") #../hw1_dataset_yolo.yaml
     parser.add_argument('--num_classes', default=8, type=int) #../hw1_dataset_yolo.yaml
+    # parser.add_argument('--freeze', default=50, type=int) 
     args = parser.parse_args()
 
     result = {}
@@ -20,6 +21,7 @@ if __name__ == '__main__':
     result['val'] = 'images/val' # same as train.
     result['test'] = 'images/test' # None
     result['nc'] = args.num_classes
+    result['freeze'] = args.freeze
     result['names'] = {}
 
     print(args.coco_path)

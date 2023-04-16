@@ -18,6 +18,7 @@ def get_args_parser():
     # parser.add_argument('--lr', default=1e-4, type=float)
     parser.add_argument('--seed', default=42, type=int) 
     # ===================== Train Config ====================
+    parser.add_argument('--dont_freeze', action='store_true') 
     parser.add_argument('--epochs', default=300, type=int) 
     parser.add_argument('--batch', default=16, type=int)
     parser.add_argument('--lr0', default=1e-2, type=float)
@@ -107,6 +108,34 @@ def main(args):
     else:  
         model = YOLO("yolov8x.pt")  # load a pretrained model (recommended for training)
 
+    # cnt=0
+    # for layer in model.children(): 
+    #     print(layer)
+    #     if cnt < args.freeze:
+    #         for param in layer.parameters():
+    #             param.requires_grad = False
+    #         cnt+=1
+
+    # freeze layers if needed.
+    
+    # num_freeze = trainer.args.
+    
+    if ~args.dont_freeze:
+        def freeze_layer(trainer):
+            model = trainer.model
+            num_freeze = 10
+            print(f"Freezing {num_freeze} layers")
+            freeze = [f'model.{x}.' for x in range(num_freeze)]  # layers to freeze 
+            for k, v in model.named_parameters(): 
+                v.requires_grad = True  # train all layers 
+                if any(x in k for x in freeze): 
+                    print(f'freezing {k}') 
+                    v.requires_grad = False 
+            print(f"{num_freeze} layers are freezed.")
+
+        # Add the custom callback to the model
+        model.add_callback("on_train_start", freeze_layer)
+
     # Train the model
     # https://github.com/ultralytics/ultralytics/issues/713
     model.train(data="./hw1_dataset_yolo.yaml", 
@@ -114,6 +143,9 @@ def main(args):
                 batch=args.batch, 
                 lr0=args.lr0, 
                 lrf=args.lrf,
+                box=7.5,  # box loss gain
+                cls=0.5,  # BCE Loss gain (scale with pixels)
+                dfl=1.5,    # Distribution Focal Loss gain, 原本1.5 # https://zhuanlan.zhihu.com/p/310229973
                 # data augmentation
                 hsv_h=0.015,
                 hsv_s=0.7,
@@ -125,7 +157,7 @@ def main(args):
                 flipud=0.5,
                 fliplr=0.5,
                 mosaic=1.0,  # image mosaic (probability)
-                mixup=0.2,  # image mixup (probability)
+                mixup=0.5,  # image mixup (probability)
                 )  # train the model
 
     # save the model to ONNX format

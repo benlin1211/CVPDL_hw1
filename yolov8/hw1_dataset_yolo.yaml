@@ -3,6 +3,8 @@ train: images/train
 val: images/val
 test: images/test
 nc: 8
+# override parameter
+# freeze: 50
 names:
   0: creatures
   1: fish
