@@ -34,13 +34,13 @@ NVIDIA GeForce RTX 3090.
     export CUDA_VISIBLE_DEVICES=0,1
 
 ### Eval and generate pred_eval.json
-    python main.py --batch_size 1 --backbone resnet50 --no_aux_loss --eval --coco_path ../hw1_dataset --resume ./ckpts_resnet50/checkpoint.pth
-    python main.py --batch_size 1 --backbone resnet101 --no_aux_loss --eval --coco_path ../hw1_dataset --resume ./ckpts_resnet101/checkpoint.pth
+    python main.py --batch_size 1 --backbone resnet50 --no_aux_loss --coco_path ../hw1_dataset --resume ./ckpts_resnet50/checkpoint.pth --eval 
+    python main.py --batch_size 1 --backbone resnet101 --no_aux_loss --coco_path ../hw1_dataset --resume ./ckpts_resnet101/checkpoint.pth --eval 
     python ../hw1_dataset/check_your_prediction_valid.py ./pred_eval.json ../hw1_dataset/valid/_annotations.coco.json
 
 ### Test and generate pred_eval.json 
-    python main.py --batch_size 1 --backbone resnet50 --no_aux_loss --test --coco_path ../hw1_dataset --resume ./ckpts_resnet50/checkpoint.pth
-    python main.py --batch_size 1 --backbone resnet101 --no_aux_loss --test --coco_path ../hw1_dataset --resume ./ckpts_resnet101/checkpoint.pth
+    python main.py --batch_size 1 --backbone resnet50 --no_aux_loss --coco_path ../hw1_dataset --resume ./ckpts_resnet50/checkpoint.pth --test
+    python main.py --batch_size 1 --backbone resnet101 --no_aux_loss --coco_path ../hw1_dataset --resume ./ckpts_resnet101/checkpoint.pth --test
     
 _______________________
 # Run train code - yolov8
