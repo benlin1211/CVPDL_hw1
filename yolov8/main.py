@@ -108,22 +108,11 @@ def main(args):
     else:  
         model = YOLO("yolov8x.pt")  # load a pretrained model (recommended for training)
 
-    # cnt=0
-    # for layer in model.children(): 
-    #     print(layer)
-    #     if cnt < args.freeze:
-    #         for param in layer.parameters():
-    #             param.requires_grad = False
-    #         cnt+=1
-
-    # freeze layers if needed.
-    
     # num_freeze = trainer.args.
-    
     if ~args.dont_freeze:
         def freeze_layer(trainer):
             model = trainer.model
-            num_freeze = 10
+            num_freeze = 0
             print(f"Freezing {num_freeze} layers")
             freeze = [f'model.{x}.' for x in range(num_freeze)]  # layers to freeze 
             for k, v in model.named_parameters(): 
@@ -150,14 +139,15 @@ def main(args):
                 hsv_h=0.015,
                 hsv_s=0.7,
                 hsv_v=0.4,
-                degrees=0.0,
+                degrees=0.1,
                 translate=0.1,
                 scale=0.5,
                 shear=0.2,
                 flipud=0.5,
                 fliplr=0.5,
                 mosaic=1.0,  # image mosaic (probability)
-                mixup=0.5,  # image mixup (probability)
+                mixup=0.2,  # image mixup (probability)
+                copy_paste=0.2,
                 )  # train the model
 
     # save the model to ONNX format
