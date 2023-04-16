@@ -51,6 +51,7 @@ _______________________
     conda create --name yolov8 python=3.10
     conda activate yolov8
     pip install -r requirements.txt
+    bash make_yolo_dataset.sh 
     
 ### Train from pre-train weights
     
