@@ -177,6 +177,7 @@ def test(model, data_loader, device):
     
     for i, (img, fname) in enumerate(data_loader):
         img = img.to(device)
+        # print(img[0].shape)
         h, w = img[0].shape[-2:]
         # print(h,w)
         outputs = model(img) 

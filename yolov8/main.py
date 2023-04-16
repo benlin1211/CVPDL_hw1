@@ -12,7 +12,7 @@ import os
 import torchvision.transforms as transforms
 import json
 from tqdm import tqdm
-
+import cv2
 def get_args_parser():
     parser = argparse.ArgumentParser('Set transformer detector', add_help=False)
     # parser.add_argument('--lr', default=1e-4, type=float)
@@ -31,6 +31,7 @@ def get_args_parser():
     # ===================== Test Config =====================
     parser.add_argument('--test', action='store_true')
     parser.add_argument('--test_path', default='./datasets/hw1_dataset_yolo/images/test', type=str)
+    parser.add_argument('--report', action='store_true')
     return parser
 
 def generate_result(model, data_path, confidence):
@@ -87,6 +88,18 @@ def main(args):
         print("over")
         return
     
+    if args.report:
+        print("Report, resume from {args.resume}")
+        model = YOLO(args.resume)
+        from torchvision import transforms
+        report_img_name = os.path.join("./datasets/hw1_dataset_yolo/images/test/IMG_2574_jpeg_jpg.rf.ca0c3ad32384309a61e92d9a8bef87b9.jpg")
+        img_PIL = Image.open(report_img_name).convert('RGB')
+        res = model.predict(img_PIL, save_json=True, conf=args.confidence)
+
+        res_plotted = res[0].plot()
+        cv2.imwrite("./report.jpg", res_plotted)
+        return
+
     # Load a model
     if args.resume:
         model = YOLO(args.resume)
@@ -103,12 +116,12 @@ def main(args):
                 lrf=args.lrf,
                 # data augmentation
                 hsv_h=0.015,
-                hsv_s=0.5,
-                hsv_v=0.3,
+                hsv_s=0.7,
+                hsv_v=0.4,
                 degrees=0.0,
                 translate=0.1,
                 scale=0.5,
-                shear=1.0,
+                shear=0.2,
                 flipud=0.5,
                 fliplr=0.5,
                 mosaic=1.0,  # image mosaic (probability)

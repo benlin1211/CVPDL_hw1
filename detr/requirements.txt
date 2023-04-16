@@ -10,3 +10,4 @@ onnxruntime
 chardet
 torchmetrics
 tqdm
+opencv-python

@@ -17,7 +17,11 @@ from datasets import build_dataset, get_coco_api_from_dataset, build_test_set
 from engine import evaluate, test, train_one_epoch
 from models import build_model
 import matplotlib.pyplot as plt
+from PIL import Image
 
+import torch.nn.functional as F
+from util.box_ops import box_cxcywh_to_xyxy
+import matplotlib
 
 def get_args_parser():
     parser = argparse.ArgumentParser('Set transformer detector', add_help=False)
@@ -176,8 +180,9 @@ def main(args):
         base_ds = get_coco_api_from_dataset(dataset_val)
 
     if args.frozen_weights is not None:
-        checkpoint = torch.load(args.frozen_weights, map_location='cpu')
-        model_without_ddp.detr.load_state_dict(checkpoint['model'])
+        # checkpoint = torch.load(args.frozen_weights, map_location='cpu')
+        # model_without_ddp.detr.load_state_dict(checkpoint['model'])
+        pass
 
     output_dir = Path(args.output_dir)
     if args.resume:
@@ -233,11 +238,56 @@ def main(args):
                 json.dump(results, fp)
             print("over")
         return
+    
     if args.report: 
-        plt.figure()
-        plt.imshow()
+        # plt.figure()
+        # plt.imshow()
+        from torchvision import transforms
+        report_img_name = os.path.join(args.coco_path, "test/IMG_2574_jpeg_jpg.rf.ca0c3ad32384309a61e92d9a8bef87b9.jpg")
+        img_PIL = Image.open(report_img_name).convert('RGB')
+        tf = transforms.Compose([transforms.ToTensor(), 
+                                 transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])])
+        img = tf(img_PIL).to(device)
+        img = torch.unsqueeze(img, axis=0)
+        h, w = img.shape[-2:]
+        # print(img.shape)
 
+        outputs = model(img) 
+        outputs = {k: v.detach().cpu() for k, v in outputs.items()}
+        pred_logits = F.softmax(outputs['pred_logits'][0], dim=1) # softmax
+        pred_boxes = box_cxcywh_to_xyxy(outputs['pred_boxes'][0] * torch.tensor([w, h, w, h], dtype=torch.float32))
+
+        all_boxes = pred_boxes.numpy() #.tolist()
+        all_labels = torch.argmax(pred_logits, axis=1).numpy() #.tolist()
+        all_scores = torch.amax(pred_logits, axis=1).numpy() #.tolist()
+        nonempty_index = np.where(all_labels!=8)
+        all_boxes = all_boxes[nonempty_index]
+        all_labels = all_labels[nonempty_index]
+        all_scores = all_scores[nonempty_index]
+
+        CLASSES = ['creatures', 'fish', 'jellyfish', 'penguin',
+                   'puffin', 'shark', 'starfish', 'stingray']
+        # plot
+        # https://blog.csdn.net/jyl1999xxxx/article/details/78737885
+        import cv2
+        report_img = cv2.imread(report_img_name)
+        # color = [(0,0,255), (0,255,0), (255,0,0),
+        #          (0,0,255), (0,0,255), (0,0,255),
+        #          (0,0,255), (0,0,255)]
+        for i, _ in enumerate(all_boxes):
+            xmin, ymin, xmax, ymax = all_boxes[i]
+            xmin, ymin, xmax, ymax = int(xmin), int(ymin), int(xmax), int(ymax)
+            cls = all_labels[i]
+            score = all_scores[i]
+            # print((xmin, xmax))
+            # print((ymin, ymax))
+            cv2.rectangle(report_img,(xmin, ymin),(xmax, ymax), (0,255,0), 4)
+            font = cv2.FONT_HERSHEY_COMPLEX
+            text = f'{CLASSES[cls]}: {score:0.2f}'
+            cv2.putText(report_img, text, (xmin, ymin), font, 1, (0,255,0), 2)
+        cv2.imwrite("./report.jpg", report_img)
         return
+    
 
     print("Start training")
     start_time = time.time()
