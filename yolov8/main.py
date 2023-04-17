@@ -19,7 +19,7 @@ def get_args_parser():
     parser.add_argument('--seed', default=42, type=int) 
     # ===================== Train Config ====================
     parser.add_argument('--dont_freeze', action='store_true') 
-    parser.add_argument('--epochs', default=300, type=int) 
+    parser.add_argument('--epochs', default=400, type=int) 
     parser.add_argument('--batch', default=16, type=int)
     parser.add_argument('--lr0', default=1e-2, type=float)
     parser.add_argument('--lrf', default=1e-5, type=float)
@@ -32,6 +32,7 @@ def get_args_parser():
     # ===================== Test Config =====================
     parser.add_argument('--test', action='store_true')
     parser.add_argument('--test_path', default='./datasets/hw1_dataset_yolo/images/test', type=str)
+    parser.add_argument('--out_path', default='./pred_test.json', type=str)
     parser.add_argument('--report', action='store_true')
     return parser
 
@@ -81,12 +82,14 @@ def main(args):
         return
 
     if args.test:
-        print("test, resume from {args.resume}")
+        print(f"test, resume from {args.resume}")
         model = YOLO(args.resume)
         results = generate_result(model, args.test_path, args.confidence)
-        with open('./pred_test.json', 'w') as fp:
+        out_dir = args.out_path.replace(args.out_path.split('/')[-1], "")
+        os.makedirs(out_dir, exist_ok=True)
+        with open(args.out_path, 'w') as fp:
             json.dump(results, fp)
-        print("over")
+        print(f"Result is saved at {args.out_path}")
         return
     
     if args.report:
@@ -134,12 +137,14 @@ def main(args):
                 lrf=args.lrf,
                 box=7.5,  # box loss gain
                 cls=0.5,  # BCE Loss gain (scale with pixels)
-                dfl=1.5,    # Distribution Focal Loss gain, 原本1.5 # https://zhuanlan.zhihu.com/p/310229973
+                dfl=1.0,    # Distribution Focal Loss gain, 原本1.5 # https://zhuanlan.zhihu.com/p/310229973
+                # 
+                close_mosaic=True,
                 # data augmentation
                 hsv_h=0.015,
                 hsv_s=0.7,
                 hsv_v=0.4,
-                degrees=0.1,
+                degrees=0.0,
                 translate=0.1,
                 scale=0.5,
                 shear=0.2,
@@ -147,7 +152,6 @@ def main(args):
                 fliplr=0.5,
                 mosaic=1.0,  # image mosaic (probability)
                 mixup=0.2,  # image mixup (probability)
-                copy_paste=0.2,
                 )  # train the model
 
     # save the model to ONNX format
@@ -162,4 +166,3 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser('DETR training and evaluation script', parents=[get_args_parser()])
     args = parser.parse_args()
     main(args)
-

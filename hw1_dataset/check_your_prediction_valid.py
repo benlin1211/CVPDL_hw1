@@ -41,7 +41,7 @@ for fname, pred in tqdm(preds.items()):
     target = get_gt_data(imageID, gt["annotations"])
     target = [{k: torch.tensor(v).to(device) for k, v in target.items()}]
     metric.update(pred, target)
-    print("pred:", pred)
-    print("target", target)
+    print(pred)
+    print(target)
 result = metric.compute()
 print(result)
