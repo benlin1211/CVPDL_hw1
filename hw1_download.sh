@@ -1,8 +1,7 @@
 #!/bin/bash
 
-
-conda create --name yolov8 python=3.10
-conda activate yolov8
+# conda create --name yolov8 python=3.10 -y
+# conda activate yolov8
 pip install -r ./yolov8/requirements.txt
 
 # download dataset
