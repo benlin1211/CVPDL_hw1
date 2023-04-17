@@ -1,10 +1,8 @@
-path: /mnt/sdb_path/ZhongWei/CVPDL/yolov8/datasets/hw1_dataset_yolo
+path: /mnt/sdb_path/ZhongWei/CVPDL_hw1/./yolov8/datasets/hw1_dataset_yolo
 train: images/train
 val: images/val
 test: images/test
 nc: 8
-# override parameter
-# freeze: 50
 names:
   0: creatures
   1: fish
