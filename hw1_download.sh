@@ -2,7 +2,7 @@
 
 # conda create --name yolov8 python=3.10 -y
 # conda activate yolov8
-pip install -r ./yolov8/requirements.txt
+# pip install -r ./yolov8/requirements.txt
 
 # download dataset
 # wget https://drive.google.com/file/d/1jjuI7Me9VFhpMHp2QP5gHKU5NPkzCQZk/view?usp=sharing
