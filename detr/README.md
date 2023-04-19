@@ -1,5 +1,9 @@
 **DE⫶TR**: End-to-End Object Detection with Transformers
 ========
+1. class number = 8
+2. 記得pretrain
+3. 用 util.box_ops 的 box_cxcywh_to_xyxy，輸出(center_x, center_y, height, width) 記得轉成 (x_min, y_min, x_max, y_max)
+4. output後處理，把所有label=8的預測去掉
 
 [![Support Ukraine](https://img.shields.io/badge/Support-Ukraine-FFD500?style=flat&labelColor=005BBB)](https://opensource.fb.com/support-ukraine)
 
